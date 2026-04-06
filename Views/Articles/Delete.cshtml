@@ -1,0 +1,53 @@
+@using Lab6.ViewModels
+@model Lab6.ViewModels.ArticleViewModel
+
+@{
+    var ErrorMessage = ViewBag.ErrorMessage as string ?? ViewData["ErrorMessage"] as string;
+}
+
+<h1>Ștergere articol</h1>
+
+<p>Pentru a confirma ștergerea, introduceți titlul articolului:</p>
+
+<div class="mb-3">
+    <h3>@Model.Title</h3>
+
+    @{
+
+        string catDisplay = "—";
+
+        var catProp = Model?.GetType().GetProperty("Category");
+        if (catProp != null)
+        {
+            var catObj = catProp.GetValue(Model);
+            var nameProp = catObj?.GetType().GetProperty("Name");
+            var catName = nameProp != null ? nameProp.GetValue(catObj)?.ToString() : null;
+            if (!string.IsNullOrEmpty(catName)) catDisplay = catName;
+        }
+        else
+        {
+            var catNameProp = Model?.GetType().GetProperty("CategoryName");
+            var catName = catNameProp != null ? catNameProp.GetValue(Model)?.ToString() : null;
+            if (!string.IsNullOrEmpty(catName)) catDisplay = catName;
+        }
+    }
+
+    <p><strong>Categorie:</strong> @catDisplay</p>
+
+    <p><strong>Data:</strong> @Model.PublishedAt.ToShortDateString()</p>
+    <p>@Model.Content</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <div class="mb-3">
+        <label class="form-label">Tastați titlul pentru confirmare:</label>
+        <input type="text" name="confirmTitle" class="form-control" />
+    </div>
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <p class="text-danger">@ErrorMessage</p>
+    }
+    <button type="submit" class="btn btn-danger">Confirmă ștergerea</button>
+</form>
+
+<a asp-action="Index">← Înapoi la listă</a>

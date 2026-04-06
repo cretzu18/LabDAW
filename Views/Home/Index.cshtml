@@ -1,0 +1,42 @@
+﻿@model Lab6.ViewModels.HomeViewModel
+
+<div class="p-5 mb-4 bg-light rounded-3 shadow-sm text-center">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold">Bine ați venit la Lab6 Știri</h1>
+        <p class="col-md-12 fs-4 text-muted">Platforma ta de știri</p>
+        <div class="d-flex justify-content-center gap-3">
+            <div class="p-3 border rounded bg-white">
+                <span class="d-block h2 mb-0">@Model.TotalArticles</span>
+                <small class="text-muted text-uppercase fw-bold">Articole</small>
+            </div>
+            <div class="p-3 border rounded bg-white">
+                <span class="d-block h2 mb-0">@Model.TotalCategories</span>
+                <small class="text-muted text-uppercase fw-bold">Categorii</small>
+            </div>
+        </div>
+        <a asp-controller="Articles" asp-action="Index" class="btn btn-primary btn-lg mt-4">Vezi toate știrile</a>
+    </div>
+</div>
+
+<h2 class="mb-4 text-center">Ultimele noutăți</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var article in Model.RecentArticles)
+    {
+        <div class="col">
+            <div class="card h-100 shadow-sm border-0">
+                @if (!string.IsNullOrEmpty(article.ImagePath))
+                {
+                    <img src="@article.ImagePath" class="card-img-top" alt="@article.Title" style="height: 200px; object-fit: cover;">
+                }
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">@article.Title</h5>
+                    <p class="card-text text-muted small">@article.Content</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pb-3 text-center">
+                    <a asp-controller="Articles" asp-action="Details" asp-route-id="@article.Id" class="btn btn-outline-secondary btn-sm">Citește mai mult</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
